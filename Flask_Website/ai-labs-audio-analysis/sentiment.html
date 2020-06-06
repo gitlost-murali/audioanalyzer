@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <title>ai-labs-audio-analysis</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="node_modules/bootstrap-slider/dist/css/bootstrap-slider.min.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  {% set base = '.' %}
+  {% include template-navbar.html %}
+  <div class="container p-3 bg-white mt-3 border-radius-lg shadow-1 analysis-container">
+    <div class="d-flex p-1">
+      <a href="#" class="d-flex fs-14 font-weight-semi-bold mb-3 text-decoration-none">
+        <img class="mr-2" src="assets/img/icon-caret.svg" alt="caret" /> Home
+      </a>
+    </div>
+    <div class="d-flex col-12 px-1 analysis-wrapper">
+      <div class="col-12 col-lg-7 pl-0">
+        <h6 class="d-flex mb-3 text-secondary font-weight-semi-bold">Audio_Task ID_1</h6>
+        <div class="d-flex flex-wrap">
+          <span class="text-nowrap fs-12 px-3 py-1 mr-2 mb-1 rounded-pill bg-danger">Happy (2)</span>
+          <span class="text-nowrap fs-12 px-3 py-1 mr-2 mb-1 rounded-pill bg-light">Emotional (2)</span>
+          <span class="text-nowrap fs-12 px-3 py-1 mr-2 mb-1 rounded-pill bg-color1">Intense-Tension/Fight (4)</span>
+          <span class="text-nowrap fs-12 px-3 py-1 mr-2 mb-1 rounded-pill bg-color2">Blank (1)</span>
+        </div>
+        <div class="d-flex my-2 audio-wave border">
+
+        </div>
+        <button class="d-flex align-items-center btn btn-color3 fs-12 rounded-pill px-2 py-1 btn-play mb-3">
+          <img src="assets/img/icon-play.svg" alt="play" class="pl-1" />
+          <span class="d-flex px-1">Play</span>
+        </button>
+        <div class="d-flex flex-wrap mt-1">
+          <span class="d-flex fs-12 text-secondary w-100">Volume</span>
+          <div class="d-flex justify-content-between w-100">
+            <input class="w-100" id="ex6" type="text" data-slider-min="-5" data-slider-max="20" data-slider-step="1" data-slider-value="3"/>
+            <span id="ex6CurrentSliderValLabel" class="text-secondary fs-12 px-3 py-0 ml-2 border border-color6 rounded-pill"><span id="ex6SliderVal">3</span></span>
+          </div>
+        </div>
+      </div>
+      <div class="col-5 px-0 my-lg-0 my-3">
+        <h6 class="d-flex mb-3 text-secondary font-weight-semi-bold">Video_Task ID_1</h6>
+        <video width="100%" class="border-radius-lg" controls>
+          <source src="mov_bbb.mp4" type="video/mp4">
+          <source src="mov_bbb.ogg" type="video/ogg">
+          Your browser does not support HTML video.
+        </video>
+      </div>
+    </div>
+  </div><!-- .container-fluid -->
+
+  <script src="ui/jquery/dist/jquery.min.js"></script>
+  <script src="ui/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="node_modules/bootstrap-slider/dist/bootstrap-slider.min.js"></script>
+  <!-- Commonly used libraries:
+  <script src="ui/d3v5/dist/d3.min.js"></script>
+  <script src="ui/lodash/lodash.min.js"></script>
+  <script src="ui/morphdom/dist/morphdom-umd.min.js"></script>
+  <script src="ui/g1/dist/g1.min.js"></script>
+  <script src="ui/moment/min/moment-with-locales.min.js"></script>
+  <script src="ui/daterangepicker/daterangepicker.js"></script>
+  <script src="ui/leaflet/dist/leaflet.js"></script>
+  <script src="ui/topojson/dist/topojson.min.js"></script>
+  -->
+  <script>
+    $("#ex6").slider();
+    $("#ex6").on("slide", function(slideEvt) {
+      $("#ex6SliderVal").text(slideEvt.value);
+    });
+  </script>
+</body>
+</html>

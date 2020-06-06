@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <title>ai-labs-audio-analysis</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <!-- {% set base = '.' %}
+  {% include template-navbar.html %} -->
+  <nav class="navbar bg-primary px-0 py-3 sticky-top">
+    <div class="container px-0">
+      <a class="navbar-brand p-0" href="{{ base }}">
+        <img src="assets/img/logo.png" alt="logo" height="34" />
+      </a>
+    </div>
+  </nav>
+  
+  <div class="container-fluid px-0">
+    <div class="d-flex banner pt-md-5 pt-2 bg-primary">
+      <div class="d-flex container px-0">
+        <div class="d-flex flex-column align-content-start justify-content-center text-white col-4 px-0 pb-md-5 mb-md-5 pb-4 ml-auto">
+          <p class="d-flex justify-content-center display-3 mb-3 font-weight-semi-bold text-nowrap"><span class="sm3">Audio in Video Analysis</span></p>
+          <p class="d-flex justify-content-center display-3 text-center mb-0 lh-1"><span class="sm5">AI model for analysing the mood in a video through audio</span></p>
+        </div>
+        <div class="col-4 px-0 mr-4">
+          <img src="assets/img/icon-speaker.svg" class="speaker" alt="speaker" />
+        </div>
+      </div>
+    </div>
+    <div class="container px-0">
+      <div class="d-flex justify-content-between mt-3 pt-3">
+        <h6 class="mb-0 font-weight-semi-bold text-secondary lh-1">Tasks (08)</h6>
+        <ul class="nav nav-pills" id="pills-tab" role="tablist">
+          <li class="nav-item">
+            <a class="nav-link active p-0 bg-transparent" id="pills-grid-tab" data-toggle="pill" href="#pills-grid" role="tab" aria-controls="pills-grid" aria-selected="true">
+              <!-- <img src="assets/img/icon-grid.svg" height="22" alt="grid" class="mr-2" /> -->
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link p-0 bg-transparent" id="pills-list-tab" data-toggle="pill" href="#pills-list" role="tab" aria-controls="pills-list" aria-selected="false">
+              <!-- <img src="assets/img/icon-list.svg" height="22" alt="list" /> -->
+            </a>
+          </li>
+        </ul>
+      </div>
+      <div class="tab-content mt-3" id="pills-tabContent">
+        <ul class="tab-pane fade show active list-unstyled" id="pills-grid" role="tabpanel" aria-labelledby="pills-grid-tab">
+          <li class="d-inline-block bg-white border-radius-lg mr-3 mb-3 pb-3">
+            <img src="assets/img/img1.png" alt="img" height="114" class="img-fluid" />
+            <h4 class="d-flex pt-1 px-2 mx-1 mt-2 mb-1 text-secondary"><span class="sm3">Task ID_1</span></h4>
+            <h5 class="d-flex px-2 mx-1 mb-0 text-info"><span class="sm3">2019-12-17  17:34:35</span></h5>
+          </li>
+          <li class="d-inline-block bg-white border-radius-lg mr-3 mb-3 pb-3">
+            <img src="assets/img/img2.png" alt="img" height="114" class="img-fluid" />
+            <h4 class="d-flex pt-1 px-2 mx-1 mt-2 mb-1 text-secondary"><span class="sm3">Task ID_1</span></h4>
+            <h5 class="d-flex px-2 mx-1 mb-0 text-info"><span class="sm3">2019-12-17  17:34:35</span></h5>
+          </li>
+          <li class="d-inline-block bg-white border-radius-lg mr-3 mb-3 pb-3">
+            <img src="assets/img/img3.png" alt="img" height="114" class="img-fluid" />
+            <h4 class="d-flex pt-1 px-2 mx-1 mt-2 mb-1 text-secondary"><span class="sm3">Task ID_1</span></h4>
+            <h5 class="d-flex px-2 mx-1 mb-0 text-info"><span class="sm3">2019-12-17  17:34:35</span></h5>
+          </li>
+          <li class="d-inline-block bg-white border-radius-lg mr-3 mb-3 pb-3">
+            <img src="assets/img/img4.png" alt="img" height="114" class="img-fluid" />
+            <h4 class="d-flex pt-1 px-2 mx-1 mt-2 mb-1 text-secondary"><span class="sm3">Task ID_1</span></h4>
+            <h5 class="d-flex px-2 mx-1 mb-0 text-info"><span class="sm3">2019-12-17  17:34:35</span></h5>
+          </li>
+          <li class="d-inline-block bg-white border-radius-lg mr-3 mb-3 pb-3">
+            <img src="assets/img/img5.png" alt="img" height="114" class="img-fluid" />
+            <h4 class="d-flex pt-1 px-2 mx-1 mt-2 mb-1 text-secondary"><span class="sm3">Task ID_1</span></h4>
+            <h5 class="d-flex px-2 mx-1 mb-0 text-info"><span class="sm3">2019-12-17  17:34:35</span></h5>
+          </li>
+          <li class="d-inline-block bg-white border-radius-lg mr-3 mb-3 pb-3">
+            <img src="assets/img/img6.png" alt="img" height="114" class="img-fluid" />
+            <h4 class="d-flex pt-1 px-2 mx-1 mt-2 mb-1 text-secondary"><span class="sm3">Task ID_1</span></h4>
+            <h5 class="d-flex px-2 mx-1 mb-0 text-info"><span class="sm3">2019-12-17  17:34:35</span></h5>
+          </li>
+          <li class="d-inline-block bg-white border-radius-lg mr-3 mb-3 pb-3">
+            <img src="assets/img/img3.png" alt="img" height="114" class="img-fluid" />
+            <h4 class="d-flex pt-1 px-2 mx-1 mt-2 mb-1 text-secondary"><span class="sm3">Task ID_1</span></h4>
+            <h5 class="d-flex px-2 mx-1 mb-0 text-info"><span class="sm3">2019-12-17  17:34:35</span></h5>
+          </li>
+          <li class="d-inline-block bg-white border-radius-lg mr-3 mb-3 pb-3">
+            <img src="assets/img/img5.png" alt="img" height="114" class="img-fluid" />
+            <h4 class="d-flex pt-1 px-2 mx-1 mt-2 mb-1 text-secondary"><span class="sm3">Task ID_1</span></h4>
+            <h5 class="d-flex px-2 mx-1 mb-0 text-info"><span class="sm3">2019-12-17  17:34:35</span></h5>
+          </li>
+        </ul>
+        <div class="tab-pane fade" id="pills-list" role="tabpanel" aria-labelledby="pills-list-tab">
+          <table class="table">
+            <thead class="bg-success">
+              <tr class="fs-12">
+                <th scope="col" class="font-weight-semi-bold border-bottom-0 border-top-0 pl-5">TASK ID</th>
+                <th scope="col" class="font-weight-semi-bold border-bottom-0 border-top-0">COMPLETED ON</th>
+              </tr>
+            </thead>
+            <tbody class="fs-14 bg-white">
+              <tr>
+                <td scope="row" class="pl-5">Task ID_1</td>
+                <td>2019-12-17  17:34:35</td>
+              </tr>
+              <tr>
+                <td scope="row" class="pl-5">Task ID_2</td>
+                <td>2019-12-17  17:34:35</td>
+              </tr>
+              <tr>
+                <td scope="row" class="pl-5">Task ID_3</td>
+                <td>2019-12-17  17:34:35</td>
+              </tr>
+              <tr>
+                <td scope="row" class="pl-5">Task ID_4</td>
+                <td>2019-12-17  17:34:35</td>
+              </tr>
+              <tr>
+                <td scope="row" class="pl-5">Task ID_5</td>
+                <td>2019-12-17  17:34:35</td>
+              </tr>
+              <tr>
+                <td scope="row" class="pl-5">Task ID_6</td>
+                <td>2019-12-17  17:34:35</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div><!-- .container-fluid -->
+
+  <script src="manual_assets/jquery.min.js"></script>
+  <script src="manual_assets/bootstrap.bundle.min.js"></script>
+  <!-- <script src="ui/jquery/dist/jquery.min.js"></script>
+  <script src="ui/bootstrap/dist/js/bootstrap.bundle.min.js"></script> -->
+  <!-- Commonly used libraries:
+  <script src="ui/d3v5/dist/d3.min.js"></script>
+  <script src="ui/lodash/lodash.min.js"></script>
+  <script src="ui/morphdom/dist/morphdom-umd.min.js"></script>
+  <script src="ui/g1/dist/g1.min.js"></script>
+  <script src="ui/moment/min/moment-with-locales.min.js"></script>
+  <script src="ui/daterangepicker/daterangepicker.js"></script>
+  <script src="ui/leaflet/dist/leaflet.js"></script>
+  <script src="ui/topojson/dist/topojson.min.js"></script>
+  -->
+</body>
+
+</html>

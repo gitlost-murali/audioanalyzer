@@ -1,0 +1,18 @@
+<View>
+  <Header value="Select regions:"></Header>
+  <Labels name="label" toName="audio" choice="multiple">
+    <Label value="happy" background="green"></Label>
+    <Label value="emotional" background="blue"></Label>
+    <Label value="Intense - Tension/Fight" background="red"></Label>
+    <Label value="no emotion" background="white"></Label>
+    <Label value="blank" background="white"></Label>
+  </Labels>
+  <!-- <Header value="Select genre:"></Header>
+  <Choices name="choice" toName="audio" choice="multiple">
+    <Choice value="Lo-Fi" />
+    <Choice value="Rock" />
+    <Choice value="Pop" />
+  </Choices> -->
+  <Header value="Listen the audio:"></Header>
+  <AudioPlus name="audio" value="$url"></AudioPlus>
+</View>
