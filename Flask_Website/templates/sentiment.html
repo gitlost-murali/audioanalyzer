@@ -35,7 +35,10 @@
           <span class="text-nowrap fs-12 px-3 py-1 mr-2 mb-1 rounded-pill bg-color1">Intense-Tension/Fight (4)</span>
           <span class="text-nowrap fs-12 px-3 py-1 mr-2 mb-1 rounded-pill bg-color2">Blank (1)</span>
         </div>
-        <div class="d-flex my-2 audio-wave border">
+        <div class="d-flex my-2 audio-wave border" id='preds_container'>
+
+        </div>
+        <div class="d-flex my-2 audio-wave border" id='audio_container'>
 
         </div>
         <button class="d-flex align-items-center btn btn-color3 fs-12 rounded-pill px-2 py-1 btn-play mb-3">
@@ -52,9 +55,9 @@
       </div>
       <div class="col-5 px-0 my-lg-0 my-3">
         <h6 class="d-flex mb-3 text-secondary font-weight-semi-bold">Video_Task ID_1</h6>
-        <video width="100%" class="border-radius-lg" controls>
-          <source src="mov_bbb.mp4" type="video/mp4">
-          <source src="mov_bbb.ogg" type="video/ogg">
+        <video width="100%" class="border-radius-lg" id='videosrc' controls>
+
+          <!-- <source src="mov_bbb.ogg" type="video/ogg"> -->
           Your browser does not support HTML video.
         </video>
       </div>
@@ -74,12 +77,49 @@
   <script src="ui/leaflet/dist/leaflet.js"></script>
   <script src="ui/topojson/dist/topojson.min.js"></script>
   -->
+  <script src="https://unpkg.com/wavesurfer.js"></script>
   <script>
     $("#ex6").slider();
     $("#ex6").on("slide", function(slideEvt) {
       $("#ex6SliderVal").text(slideEvt.value);
     });
-    alert('{{ data }}');
+    $(document).ready(
+      function()
+      {
+        colors = {'happy':'#A5DC9C','emotional':'#B0B7F7','Intense - Tension/Fight':'#FFB8BC','no emotion':'#FFFFFF'};
+        var indexno = '{{ data }}';
+        $.ajax({
+          type: 'POST',
+          url: '/getdata?indexno='+indexno,
+          contentType: 'json',
+        }).done(function(res)
+          {
+          console.log(res['preds'][0]);  
+          // #Add colors/predictions
+          for(var jsonent of res['preds'])
+          {
+            percentage_of_audio = ((jsonent['end']-jsonent['start'])/res['length'])*100;
+            $("#preds_container").append('<div style="background-color: '+colors[jsonent['labels']]+';width:'+percentage_of_audio+'%"></div>');
+          }
+
+          // #Update Video
+          $("#videosrc").html('<source src="'+res['vidurl']+'" type="video/mp4"></source>' );
+          // #Update audio
+          audiostrg = '<audio style="width:100%" class="border-radius-lg" id="audiosrc" controls=""><source src="'+res['url']+'" type="video/mp4"> Your browser does not support HTML audio.</audio>';
+          $("#audio_container").append(audiostrg);
+          
+          $('input.play', player).bind('click',function () {
+            $('video, audio', player)[0].play();
+            $('video, audio', player)[1].play(); // add this line to play second video
+          });
+          $('input.pause', player).bind('click',function (){
+                $('video, audio', player)[0].pause();
+                $('video, audio', player)[1].pause(); // add this line to pause second video
+          });
+
+          }
+      )});
+
   </script>
 </body>
 </html>
