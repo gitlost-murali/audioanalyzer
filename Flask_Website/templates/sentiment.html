@@ -83,10 +83,39 @@
     $("#ex6").on("slide", function(slideEvt) {
       $("#ex6SliderVal").text(slideEvt.value);
     });
+
+    //Function to convert hex format to a rgb color
+    function rgb2hex(orig){
+    var rgb = orig.replace(/\s/g,'').match(/^rgba?\((\d+),(\d+),(\d+)/i);
+    return (rgb && rgb.length === 4) ? "#" +
+      ("0" + parseInt(rgb[1],10).toString(16)).slice(-2) +
+      ("0" + parseInt(rgb[2],10).toString(16)).slice(-2) +
+      ("0" + parseInt(rgb[3],10).toString(16)).slice(-2) : orig;
+    }
+
+    var label_durationdict = {};
+    var colors = {'happy':'#a5dc9c','emotional':'#b0b7f7','Intense - Tension/Fight':'#ffb8bc','no emotion':'#ffffff'};
+    var highlight_colors = {'#a5dc9c':'green','#b0b7f7':'blue','#ffb8bc':'red','no emotion':'#ffffff'};
+    function updateplayer(divid)
+    {
+      alert(divid);
+      console.log(rgb2hex($('#'+divid).css('background-color')));
+      var newcolor = highlight_colors[rgb2hex($('#'+divid).css('background-color'))]
+      $('#'+divid).css('background-color',newcolor);
+      var myvideo = document.getElementById('videosrc');
+      myvideo.currentTime = label_durationdict[divid];
+      var myaudio = document.getElementById('audiosrc');
+      myaudio.currentTime = label_durationdict[divid];
+
+      myvideo.play();
+      myaudio.play();
+
+    }
+
     $(document).ready(
       function()
       {
-        colors = {'happy':'#A5DC9C','emotional':'#B0B7F7','Intense - Tension/Fight':'#FFB8BC','no emotion':'#FFFFFF'};
+
         var indexno = '{{ data }}';
         $.ajax({
           type: 'POST',
@@ -96,26 +125,24 @@
           {
           console.log(res['preds'][0]);  
           // #Add colors/predictions
+          var counter = 0;
+
           for(var jsonent of res['preds'])
           {
+            
             percentage_of_audio = ((jsonent['end']-jsonent['start'])/res['length'])*100;
-            $("#preds_container").append('<div style="background-color: '+colors[jsonent['labels']]+';width:'+percentage_of_audio+'%"></div>');
+            $("#preds_container").append('<div id="lblock_'+counter+'" onclick="updateplayer(\'lblock_'+counter+'\')" style="background-color: '+colors[jsonent['labels']]+';width:'+percentage_of_audio+'%"></div>');
+            label_durationdict['lblock_'+counter] = jsonent['start'];
+            counter+=1;
           }
+
 
           // #Update Video
           $("#videosrc").html('<source src="'+res['vidurl']+'" type="video/mp4"></source>' );
           // #Update audio
           audiostrg = '<audio style="width:100%" class="border-radius-lg" id="audiosrc" controls=""><source src="'+res['url']+'" type="video/mp4"> Your browser does not support HTML audio.</audio>';
           $("#audio_container").append(audiostrg);
-          
-          $('input.play', player).bind('click',function () {
-            $('video, audio', player)[0].play();
-            $('video, audio', player)[1].play(); // add this line to play second video
-          });
-          $('input.pause', player).bind('click',function (){
-                $('video, audio', player)[0].pause();
-                $('video, audio', player)[1].pause(); // add this line to pause second video
-          });
+
 
           }
       )});
