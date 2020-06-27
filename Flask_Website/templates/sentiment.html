@@ -30,32 +30,46 @@
       <div class="col-12 col-lg-7 pl-0">
         <h6 class="d-flex mb-3 text-secondary font-weight-semi-bold">Audio_Task ID_1</h6>
         <div class="d-flex flex-wrap">
-          <span class="text-nowrap fs-12 px-3 py-1 mr-2 mb-1 rounded-pill bg-danger">Happy (2)</span>
-          <span class="text-nowrap fs-12 px-3 py-1 mr-2 mb-1 rounded-pill bg-light">Emotional (2)</span>
-          <span class="text-nowrap fs-12 px-3 py-1 mr-2 mb-1 rounded-pill bg-color1">Intense-Tension/Fight (4)</span>
-          <span class="text-nowrap fs-12 px-3 py-1 mr-2 mb-1 rounded-pill bg-color2">Blank (1)</span>
+
+          <span id='happy'class="text-nowrap fs-12 px-3 py-1 mr-2 mb-1 rounded-pill bg-danger">Happy (2)</span>
+          <span id='emotional' class="text-nowrap fs-12 px-3 py-1 mr-2 mb-1 rounded-pill bg-light">Emotional (2)</span>
+          <span id='Intense_-_Tension_Fight' class="text-nowrap fs-12 px-3 py-1 mr-2 mb-1 rounded-pill bg-color1">Intense-Tension/Fight (4)</span>
+          <span id='no emotion' class="text-nowrap fs-12 px-3 py-1 mr-2 mb-1 rounded-pill bg-color2">Blank (1)</span>
         </div>
         <div class="d-flex my-2 audio-wave border" id='preds_container'>
 
         </div>
-        <div class="d-flex my-2 audio-wave border" id='audio_container'>
+        <div class="d-flex my-2 border" id='audio_container'>
 
         </div>
-        <button class="d-flex align-items-center btn btn-color3 fs-12 rounded-pill px-2 py-1 btn-play mb-3">
-          <img src="/static/assets/img/icon-play.svg" alt="play" class="pl-1" />
-          <span class="d-flex px-1">Play</span>
-        </button>
         <div class="d-flex flex-wrap mt-1">
-          <span class="d-flex fs-12 text-secondary w-100">Volume</span>
           <div class="d-flex justify-content-between w-100">
-            <input class="w-100" id="ex6" type="text" data-slider-min="-5" data-slider-max="20" data-slider-step="1" data-slider-value="3"/>
-            <span id="ex6CurrentSliderValLabel" class="text-secondary fs-12 px-3 py-0 ml-2 border border-color6 rounded-pill"><span id="ex6SliderVal">3</span></span>
+            <input class="w-100" id="ex6" type="text" data-slider-min="0" data-slider-max="1300" data-slider-step="1" data-slider-value="0"/>
           </div>
         </div>
+
+        <div class="d-flex flex-wrap mt-3">
+          <div class="d-flex justify-content-between w-100">
+          <span class="d-flex fs-12 text-secondary w-100">Player</span>
+          <span id="ex6CurrentSliderValLabel" class="text-secondary fs-12 px-3 py-0 ml-2 border border-color6 rounded-pill"><span id="ex6SliderVal">0</span></span>
+          </div>
+        </div>
+
+        <div class="d-flex flex-wrap">  
+        <button class="d-flex align-items-center btn btn-color3 fs-12 rounded-pill px-2 py-1 btn-play mb-3" id='playbar'>
+          <img id='playimg' src="/static/assets/img/icon-play.svg" alt="play" class="pl-1" />
+          <span class="d-flex px-1" id='playcontrol'>Play</span>
+        </button>
+        <button class="d-flex align-items-center btn btn-color3 fs-12 rounded-pill px-2 py-1 btn-play mb-3" id='mutevocals'>
+          <!-- <img id='playimg' src="/static/assets/img/icon-play.svg" alt="play" class="pl-1" /> -->
+          <span class="d-flex px-1" id='mutecontrol'>Mute Vocals</span>
+        </button>
+        </div>
+
       </div>
       <div class="col-5 px-0 my-lg-0 my-3">
         <h6 class="d-flex mb-3 text-secondary font-weight-semi-bold">Video_Task ID_1</h6>
-        <video width="100%" class="border-radius-lg" id='videosrc' controls>
+        <video width="100%" class="border-radius-lg" id='videosrc'>
 
           <!-- <source src="mov_bbb.ogg" type="video/ogg"> -->
           Your browser does not support HTML video.
@@ -77,11 +91,27 @@
   <script src="ui/leaflet/dist/leaflet.js"></script>
   <script src="ui/topojson/dist/topojson.min.js"></script>
   -->
-  <script src="https://unpkg.com/wavesurfer.js"></script>
+
   <script>
     $("#ex6").slider();
     $("#ex6").on("slide", function(slideEvt) {
       $("#ex6SliderVal").text(slideEvt.value);
+      var myvideo = document.getElementById('videosrc');
+      myvideo.currentTime = slideEvt.value;
+      var myaudio = document.getElementById('audiosrc');
+      myaudio.currentTime = slideEvt.value;
+      $('#playcontrol').text('Pause');
+      $("#playimg").attr("src","/static/assets/img/icon-pause.svg");
+      myvideo.play();
+      myaudio.play();
+
+      // Iterate all div blocks to find the right one.
+      $.each( label_divmapping, function( divid, label ) {
+        // $('#'+divid).css('background-color',colors[label]);;
+        console.log('Cuenta is' + (slideEvt.value < label_durationstartdict[divid]));
+        if(slideEvt.value > label_durationstartdict[divid] && slideEvt.value < label_durationstartdict[divid])
+          {div_updateplayer(divid);}
+      });
     });
 
     //Function to convert hex format to a rgb color
@@ -93,29 +123,119 @@
       ("0" + parseInt(rgb[3],10).toString(16)).slice(-2) : orig;
     }
 
-    var label_durationdict = {};
+    var label_durationstartdict = {};
+    var label_durationenddict = {};
+    var label_divmapping = {};
+
     var colors = {'happy':'#a5dc9c','emotional':'#b0b7f7','Intense - Tension/Fight':'#ffb8bc','no emotion':'#ffffff'};
+    var label_counts = {'happy': 0,'emotional': 0,'Intense - Tension/Fight': 0,'no emotion': 0, 'blank': 0};   
     var highlight_colors = {'#a5dc9c':'green','#b0b7f7':'blue','#ffb8bc':'red','no emotion':'#ffffff'};
-    function updateplayer(divid)
+
+    function div_updateplayer(divid)
     {
-      alert(divid);
+      // Reset all colors to original labels
+    $.each( label_divmapping, function( divid, label ) {
+      $('#'+divid).css('background-color',colors[label]);;
+    });
+
+      // alert(divid);
       console.log(rgb2hex($('#'+divid).css('background-color')));
       var newcolor = highlight_colors[rgb2hex($('#'+divid).css('background-color'))]
       $('#'+divid).css('background-color',newcolor);
       var myvideo = document.getElementById('videosrc');
-      myvideo.currentTime = label_durationdict[divid];
+      myvideo.currentTime = label_durationstartdict[divid];
       var myaudio = document.getElementById('audiosrc');
-      myaudio.currentTime = label_durationdict[divid];
-
+      myaudio.currentTime = label_durationstartdict[divid];
+      function checkTime() 
+      {
+        if (myvideo.currentTime >= label_durationenddict[divid]) 
+          {
+             myvideo.pause();
+             myaudio.pause();
+             $('#playcontrol').text('Play');
+             $("#playimg").attr("src","/static/assets/img/icon-play.svg");
+          } 
+        else 
+          {
+           /* call checkTime every 1/10th 
+              second until endTime */
+             setTimeout(checkTime, 100);
+          }
+      }
       myvideo.play();
       myaudio.play();
-
+      $('#playcontrol').text('Pause');
+      $("#playimg").attr("src","/static/assets/img/icon-pause.svg");
+      checkTime();
     }
+
+    function time_convert(num)
+    { 
+      var num = parseInt(num);
+      var minutes = Math.floor(num / 60);  
+      var seconds = num % 60;
+      return minutes + ":" + seconds;
+    }
+    var myvideo = document.getElementById('videosrc');
+    myvideo.ontimeupdate = function() {updateslider()};
+    function updateslider() {
+      // Display the current position of the video in a p element with id="demo"
+          $("#ex6SliderVal").text(time_convert(myvideo.currentTime));
+
+          sliderlength = $("#ex6").attr('data-slider-max'); // or 1300
+          $(".min-slider-handle.round").css("left", ((myvideo.currentTime/sliderlength)*100)+"%");
+          $(".min-slider-handle.round").attr("valuenow", ""+myvideo.currentTime);
+          $("#ex6").attr("value", ""+myvideo.currentTime);
+          $("#ex6").attr("data-value", ""+myvideo.currentTime);          
+          $(".slider-selection").css("width", ((myvideo.currentTime/sliderlength)*100)+"%");
+          $(".slider-track-high").css("width", ((1 - (myvideo.currentTime/sliderlength) )*100)+"%");
+        }
+
+      // Functionality for PLAY button
+    $("#mutevocals").click( 
+      function()
+      {
+        if($('#mutecontrol').text()=='Mute Vocals')
+        {
+          $('#mutecontrol').text('Unmute Vocals');
+          $("#videosrc").prop('muted', true); //mute
+        }
+        else if($('#mutecontrol').text()=='Unmute Vocals')
+        {
+          $('#mutecontrol').text('Mute Vocals');
+          $("#videosrc").prop('muted', false); //mute
+        }
+      }
+    )
+
+      // Functionality for PLAY button
+    $("#playbar").click( 
+      function()
+      {
+        var myvideo = document.getElementById('videosrc');
+        var myaudio = document.getElementById('audiosrc');
+        console.log($('#playcontrol').text()=='Play');
+        console.log($('#playcontrol').text());
+        if($('#playcontrol').text()=='Play')
+        {
+          myvideo.play();
+          myaudio.play();
+          $('#playcontrol').text('Pause');
+          $("#playimg").attr("src","/static/assets/img/icon-pause.svg");
+        }
+        else if($('#playcontrol').text()=='Pause')
+        {
+          myvideo.pause();
+          myaudio.pause();
+          $('#playcontrol').text('Play');
+          $("#playimg").attr("src","/static/assets/img/icon-play.svg");
+        }
+      })
 
     $(document).ready(
       function()
       {
-
+        $(".slider.slider-horizontal").addClass("w-100")
         var indexno = '{{ data }}';
         $.ajax({
           type: 'POST',
@@ -126,24 +246,36 @@
           console.log(res['preds'][0]);  
           // #Add colors/predictions
           var counter = 0;
+          
+          // Keeping the slider in sync with length
+          $("#ex6").attr('data-slider-max', res['length']);
+          $(".slider-handle.min-slider-handle.round").attr('aria-valuemax', res['length']);
+          $(".slider-handle.max-slider-handle.round.hide").attr('aria-valuemax', res['length']);          
 
           for(var jsonent of res['preds'])
           {
-            
+            label_counts[jsonent['labels']] += 1;
             percentage_of_audio = ((jsonent['end']-jsonent['start'])/res['length'])*100;
-            $("#preds_container").append('<div id="lblock_'+counter+'" onclick="updateplayer(\'lblock_'+counter+'\')" style="background-color: '+colors[jsonent['labels']]+';width:'+percentage_of_audio+'%"></div>');
-            label_durationdict['lblock_'+counter] = jsonent['start'];
+            $("#preds_container").append('<div id="lblock_'+counter+'" onclick="div_updateplayer(\'lblock_'+counter+'\')" style="background-color: '+colors[jsonent['labels']]+';width:'+percentage_of_audio+'%"></div>');
+            label_durationstartdict['lblock_'+counter] = jsonent['start'];
+            label_durationenddict['lblock_'+counter] = jsonent['end'];
+            label_divmapping['lblock_'+counter] = jsonent['labels'];
             counter+=1;
           }
 
+          $.each(label_counts, function(labelname, count)
+          {
+            console.log(labelname);
+            $('#'+labelname.replace(/[&\/\\#, +()$~%.'":*?<>{}]/g, '_')).text(labelname +' ('+count+')');
+          });
 
           // #Update Video
           $("#videosrc").html('<source src="'+res['vidurl']+'" type="video/mp4"></source>' );
           // #Update audio
-          audiostrg = '<audio style="width:100%" class="border-radius-lg" id="audiosrc" controls=""><source src="'+res['url']+'" type="video/mp4"> Your browser does not support HTML audio.</audio>';
+          audiostrg = '<audio style="width:100%" class="border-radius-lg" id="audiosrc"><source src="'+res['url']+'" type="video/mp4"> Your browser does not support HTML audio.</audio>';
           $("#audio_container").append(audiostrg);
 
-
+          
           }
       )});
 

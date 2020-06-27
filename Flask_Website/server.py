@@ -20,14 +20,17 @@ def read_predsdata(predfolder='static/preds_data'):
         urls[indexno]=(jsondata['data']['url'])
         for entry in jsondata['completions'][0]['result']:
             predictions[indexno] = predictions.get(indexno,[]) + [entry['value']]
-            # print(entry['value'])
     return sorted(indexnums), predictions, urls
 
 indexnums, predictions, urls = read_predsdata()
 
 @app.route('/')
 def home():
-    return render_template('index.html',data=indexnums)
+    return render_template('index.html')\
+
+@app.route('/getindices',methods=['POST','GET'])
+def getindices():
+    return jsonify({'indices':indexnums})
 
 @app.route('/sentiment')
 def sentiment():

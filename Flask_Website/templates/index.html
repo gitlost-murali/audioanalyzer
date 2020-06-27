@@ -49,48 +49,6 @@
       </div>
       <div class="tab-content mt-3" id="pills-tabContent">
         <ul class="tab-pane fade show active list-unstyled" id="pills-grid" role="tabpanel" aria-labelledby="pills-grid-tab">
-          <li class="d-inline-block bg-white border-radius-lg mr-3 mb-3 pb-3">
-            <a href="{{url_for('sentiment')}}?indexno=1">
-            <img src="/static/assets/img/img1.png" alt="img" height="114" class="img-fluid" />
-            <h4 class="d-flex pt-1 px-2 mx-1 mt-2 mb-1 text-secondary"><span class="sm3">Task ID_1</span></h4>
-            <h5 class="d-flex px-2 mx-1 mb-0 text-info"><span class="sm3">2019-12-17  17:34:35</span></h5>
-            </a>
-          </li>
-          <li class="d-inline-block bg-white border-radius-lg mr-3 mb-3 pb-3">
-            <img src="/static/assets/img/img2.png" alt="img" height="114" class="img-fluid" />
-            <h4 class="d-flex pt-1 px-2 mx-1 mt-2 mb-1 text-secondary"><span class="sm3">Task ID_2</span></h4>
-            <h5 class="d-flex px-2 mx-1 mb-0 text-info"><span class="sm3">2019-12-17  17:34:35</span></h5>
-          </li>
-          <li class="d-inline-block bg-white border-radius-lg mr-3 mb-3 pb-3">
-            <img src="/static/assets/img/img3.png" alt="img" height="114" class="img-fluid" />
-            <h4 class="d-flex pt-1 px-2 mx-1 mt-2 mb-1 text-secondary"><span class="sm3">Task ID_3</span></h4>
-            <h5 class="d-flex px-2 mx-1 mb-0 text-info"><span class="sm3">2019-12-17  17:34:35</span></h5>
-          </li>
-          <li class="d-inline-block bg-white border-radius-lg mr-3 mb-3 pb-3">
-            <img src="/static/assets/img/img4.png" alt="img" height="114" class="img-fluid" />
-            <h4 class="d-flex pt-1 px-2 mx-1 mt-2 mb-1 text-secondary"><span class="sm3">Task ID_4</span></h4>
-            <h5 class="d-flex px-2 mx-1 mb-0 text-info"><span class="sm3">2019-12-17  17:34:35</span></h5>
-          </li>
-          <li class="d-inline-block bg-white border-radius-lg mr-3 mb-3 pb-3">
-            <img src="/static/assets/img/img5.png" alt="img" height="114" class="img-fluid" />
-            <h4 class="d-flex pt-1 px-2 mx-1 mt-2 mb-1 text-secondary"><span class="sm3">Task ID_5</span></h4>
-            <h5 class="d-flex px-2 mx-1 mb-0 text-info"><span class="sm3">2019-12-17  17:34:35</span></h5>
-          </li>
-          <li class="d-inline-block bg-white border-radius-lg mr-3 mb-3 pb-3">
-            <img src="/static/assets/img/img6.png" alt="img" height="114" class="img-fluid" />
-            <h4 class="d-flex pt-1 px-2 mx-1 mt-2 mb-1 text-secondary"><span class="sm3">Task ID_6</span></h4>
-            <h5 class="d-flex px-2 mx-1 mb-0 text-info"><span class="sm3">2019-12-17  17:34:35</span></h5>
-          </li>
-          <li class="d-inline-block bg-white border-radius-lg mr-3 mb-3 pb-3">
-            <img src="/static/assets/img/img3.png" alt="img" height="114" class="img-fluid" />
-            <h4 class="d-flex pt-1 px-2 mx-1 mt-2 mb-1 text-secondary"><span class="sm3">Task ID_7</span></h4>
-            <h5 class="d-flex px-2 mx-1 mb-0 text-info"><span class="sm3">2019-12-17  17:34:35</span></h5>
-          </li>
-          <li class="d-inline-block bg-white border-radius-lg mr-3 mb-3 pb-3">
-            <img src="/static/assets/img/img5.png" alt="img" height="114" class="img-fluid" />
-            <h4 class="d-flex pt-1 px-2 mx-1 mt-2 mb-1 text-secondary"><span class="sm3">Task ID_8</span></h4>
-            <h5 class="d-flex px-2 mx-1 mb-0 text-info"><span class="sm3">2019-12-17  17:34:35</span></h5>
-          </li>
         </ul>
         <div class="tab-pane fade" id="pills-list" role="tabpanel" aria-labelledby="pills-list-tab">
           <table class="table">
@@ -147,14 +105,25 @@
   <script src="ui/topojson/dist/topojson.min.js"></script>
   -->
   <script>
-          var indexnums = '{{ data }}';
-          var idx = 0;
-          for(idx in '{{ data }}' )
-          {
-            alert(idx);
-            tile = '<li class="d-inline-block bg-white border-radius-lg mr-3 mb-3 pb-3"><a href="sentiment?indexno='+idx+'"><img src="/static/assets/img/img1.png" alt="img" height="114" class="img-fluid" /><h4 class="d-flex pt-1 px-2 mx-1 mt-2 mb-1 text-secondary"><span class="sm3">Task ID_1</span></h4><h5 class="d-flex px-2 mx-1 mb-0 text-info"><span class="sm3">2019-12-17  17:34:35</span></h5></a></li>'
-            $('#pills-grid').append(tile);
-          }
+        $(document).ready(
+        function()
+        {
+          $.ajax({
+              type: 'POST',
+              url: "/getindices",
+              contentType: "json",
+          }).done(function(res) {
+            var indexnums = res['indices'];
+            var idx = 0;
+            for(idx in indexnums )
+            {
+              tile = '<li class="d-inline-block bg-white border-radius-lg mr-3 mb-3 pb-3"><a href="sentiment?indexno='+idx+'"><img src="/static/assets/img/img'+(parseInt(idx)+1)+'.png" alt="img" height="114" class="img-fluid" /><h4 class="d-flex pt-1 px-2 mx-1 mt-2 mb-1 text-secondary"><span class="sm3">Task ID_'+(parseInt(idx)+1)+'</span></h4><h5 class="d-flex px-2 mx-1 mb-0 text-info"><span class="sm3">2019-12-17  17:34:35</span></h5></a></li>'
+              $('#pills-grid').append(tile);
+            }
+          });
+
+        }
+        );
   </script>
 </body>
 
